@@ -1,0 +1,18 @@
+{
+  "Nx": 400,
+  "dx": 0.01,
+  "dt": 0.005,
+  "epsilon": 8.854e-12,
+  "mu": 1.2566e-6,
+  "frequency": 1e9,
+  "time_steps": 1000,
+  "initial_conditions": {
+    "ey": "sin(2 * pi * frequency * t)",
+    "bz": 0
+  },
+  "boundary_conditions": {
+    "type": "metallic",
+    "ey_0": 0,
+    "ey_Nx": 0
+  }
+}
