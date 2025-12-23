@@ -1,5 +1,5 @@
 Parameters: c=10.0, dx=1.0, dt=0.101
-Target: Period=4.0, Wavelength=40.0
+Target: Period=1.2566370614359172, Wavelength=12.566370614359172
 Measured: Period=0.20200000000000032
 Measured: Wavelength=2.0
 Measured: Velocity=9.900990099009885

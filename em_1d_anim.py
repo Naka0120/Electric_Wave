@@ -14,8 +14,8 @@ def create_animation():
     sim = EMSimulation1D(nx, dx, c, eps0, dt_ratio=dt_ratio)
     
     # Source Parameters
-    target_wavelength = 40.0
-    freq = c / target_wavelength
+    omega = 5.0
+    freq = omega / (2 * np.pi)
     source_pos = nx // 2
     
     # Animation Setup
@@ -54,7 +54,7 @@ def create_animation():
     def animate(i):
         # Advance simulation
         for _ in range(steps_per_frame):
-            current = 5.0 * np.sin(2 * np.pi * freq * sim.t) # Amplitude 5.0 source
+            current = 5.0 * np.sin(omega * sim.t) # Amplitude 5.0 source
             sim.update(source_current=current, source_pos_idx=source_pos)
         
         # Update Plot

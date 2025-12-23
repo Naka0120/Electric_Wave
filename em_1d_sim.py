@@ -91,13 +91,13 @@ def run_simulation(nx=400, dx=1.0, c=10.0, eps0=1.0, dt_ratio=0.5, steps=1000, o
     sim = EMSimulation1D(nx, dx, c, eps0, dt_ratio=dt_ratio)
     
     # Source Parameters
-    # Target wavelength lambda = 10 * dx = 10.0 (Example from requirements: 1/10 resolution)
-    # Actually, let's make it larger so it looks nice. say 40 points.
-    target_wavelength = 40.0
-    freq = c / target_wavelength
+    # Slide example: omega = 5.0
+    omega = 5.0
+    freq = omega / (2 * np.pi)
     period = 1.0 / freq
+    wavelength = c / freq
     
-    print(f"Goal: Wavelength={target_wavelength}, Frequency={freq}, Period={period}")
+    print(f"Goal: Omega={omega}, Frequency={freq:.4f}, Period={period:.4f}, Wavelength={wavelength:.4f}")
     
     source_pos = nx // 2
     
@@ -109,12 +109,9 @@ def run_simulation(nx=400, dx=1.0, c=10.0, eps0=1.0, dt_ratio=0.5, steps=1000, o
     probe_signal = []
     
     for s in range(steps):
-        # Sinusoidal Source
-        # Activate for limited time to see a pulse, or continuous?
-        # Let's do continuous to see steady state, or pulse to see propagation clear.
-        # User asked for "sin sinusoidal excitation", usually implies continuous.
-        # But to measure speed, a wave packet or just observing the phase is good.
-        current = np.sin(2 * np.pi * freq * sim.t)
+        # Sinusoidal Source: J0 * sin(omega * t)
+        # t is simulation time (s * dt)
+        current = np.sin(omega * sim.t)
         
         sim.update(source_current=current, source_pos_idx=source_pos)
         
@@ -183,7 +180,7 @@ def run_simulation(nx=400, dx=1.0, c=10.0, eps0=1.0, dt_ratio=0.5, steps=1000, o
     velocity_check = measured_lambda_spatial / measured_period if measured_period > 0 else 0
     
     print(f"--- Verification (dt={dt_ratio}) ---")
-    print(f"Set C={c}, Set Period={period:.4f}, Set Wavelength={target_wavelength:.4f}")
+    print(f"Set C={c}, Set Period={period:.4f}, Set Wavelength={wavelength:.4f}")
     print(f"Measured Period={measured_period:.4f}")
     print(f"Measured Wavelength (Spatial)={measured_lambda_spatial:.4f}")
     print(f"Calculated Velocity (Lambda/Period)={velocity_check:.4f}")
@@ -191,7 +188,7 @@ def run_simulation(nx=400, dx=1.0, c=10.0, eps0=1.0, dt_ratio=0.5, steps=1000, o
     # Save verification text
     with open(f"{output_dir}/verification_dt{dt_ratio}.txt", "w") as f:
         f.write(f"Parameters: c={c}, dx={dx}, dt={sim.dt}\n")
-        f.write(f"Target: Period={period}, Wavelength={target_wavelength}\n")
+        f.write(f"Target: Period={period}, Wavelength={wavelength}\n")
         f.write(f"Measured: Period={measured_period}\n")
         f.write(f"Measured: Wavelength={measured_lambda_spatial}\n")
         f.write(f"Measured: Velocity={velocity_check}\n")
